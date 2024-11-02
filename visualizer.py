@@ -1,7 +1,6 @@
 import pygame
 import numpy as np
 
-
 class PygameContext:
     def __init__(self, context_size, screen_size):
         self.context_size = context_size
@@ -25,16 +24,24 @@ class PygameEngine:
         self.running = True
 
         self.visualizers = []
+        self.input_devices = []
 
         self.context = PygameContext((2, 2), (self.width, self.height))
 
     def add_visualizers(self, visualizers):
         self.visualizers += visualizers
 
+    def add_input_devices(self, input_devices):
+        self.input_devices += input_devices
+
     def _handle_events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.running = False
+
+        keys = pygame.key.get_pressed()
+        for input_device in self.input_devices:
+            input_device.update_with_keys(keys)
 
     def _draw(self):
         for visualizer in self.visualizers:
@@ -62,6 +69,7 @@ class BicycleModelVisualizationInfo:
 class BicycleModelVisualizer:
 
     def __init__(self, model):
+        # TODO: parameterize if and how you visaulize the front wheel
         self.model = model
 
     def draw_bicycle(self, engine):

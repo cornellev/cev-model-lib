@@ -1,6 +1,8 @@
 from models import KinematicBicycleModel
 from visualizer import PygameEngine, BicycleModelVisualizer
 import numpy as np
+import pygame
+
 
 model = KinematicBicycleModel()
 
@@ -13,16 +15,25 @@ model = KinematicBicycleModel()
 
 print(model.state)
 
+class KeyboardInputDevice:
+    def __init__(self):
+        self.u = np.zeros((2, 1))
+
+    def get_input(self):
+        return self.u
+
+    def update_with_keys(self, keys):
+        self.u[0,0] = 0.3 * (keys[pygame.K_UP] - keys[pygame.K_DOWN])
+        self.u[1,0] = np.deg2rad(30) * (keys[pygame.K_LEFT] - keys[pygame.K_RIGHT])
+
+
+kb = KeyboardInputDevice()
+
 eng = PygameEngine(800, 640)
 eng.add_visualizers([ BicycleModelVisualizer(model) ])
+eng.add_input_devices([ kb ])
 
-i = 0
-j = 0
 def fn():
-    global i, j
-    model.state[2,0] = np.deg2rad(i)
-    model.state[3,0] = np.deg2rad(j)
-    j+=0.2
-    i+=0.1
+    model.update(kb.get_input(), 0.1)
 
 eng.run(fn)
