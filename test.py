@@ -23,6 +23,7 @@ class KeyboardInputDevice:
         return self.u
 
     def update_with_keys(self, keys):
+        # TODO: parameterize maximum controllable velocity
         self.u[0,0] = 0.3 * (keys[pygame.K_UP] - keys[pygame.K_DOWN])
         self.u[1,0] = np.deg2rad(30) * (keys[pygame.K_LEFT] - keys[pygame.K_RIGHT])
 

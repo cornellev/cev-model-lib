@@ -9,6 +9,7 @@ class KinematicBicycleModel:
 
     def __init__(self):
         self.state = np.zeros((4, 1))
+        # TODO: parameterize wheelbase
         self.wheelbase = 0.15 # meters, 6 inches. Front <-> Rear axis distance
 
     def update(self, inputs, dt):
