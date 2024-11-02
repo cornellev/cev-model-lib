@@ -16,7 +16,7 @@ class KinematicBicycleModel:
 
         dx = np.array([[
             inputs[0,0] * np.cos(self.state[2,0]),
-            inputs[0,0] * np.cos(self.state[2,0]),
+            inputs[0,0] * np.sin(self.state[2,0]),
             (inputs[0,0] / self.wheelbase) * np.tan(inputs[1,0]),
             0.0
         ]]).T
