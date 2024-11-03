@@ -26,7 +26,8 @@ class PygameEngine:
         self.visualizers = []
         self.input_devices = []
 
-        self.context = PygameContext((2, 2), (self.width, self.height))
+        # TODO: parameterize context size
+        self.context = PygameContext((10, 10), (self.width, self.height))
 
     def add_visualizers(self, visualizers):
         self.visualizers += visualizers
