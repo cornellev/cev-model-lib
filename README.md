@@ -11,4 +11,4 @@ Simulator for CEV related vehicles
 Later,
 - Add more complicated outputs that interact with environment, like LiDAR and Camera (likely requires a more complicated engine)
 - Add visualization in said more complicated engine
-
+- Nice configurability features: changing model parameters, process and sensor noise, and classes to override to let you implement more "fine tuned" features.
