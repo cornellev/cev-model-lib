@@ -124,7 +124,8 @@ class VoltageBicycleModel:
 
         self.motor = motor
 
-        self.servo_voltage = 6.1 # lol this could be anything I don't care about this as much
+        self.servo_rads_per_s_at_4_8_V = 6.16  # rad/s at 4.8V
+        self.servo_rads_per_s_at_6_0_V = np.deg2rad(60 / 0.13) # rad/s
 
     def _states(self):
         for i in range(int(self.state.shape[0])):
@@ -140,19 +141,21 @@ class VoltageBicycleModel:
         F_wheel = motor_torque / self.wheel_radius
         F_friction = np.sign(velocity) * self.mu_s * self.mass * self.g
 
-        # Compute next steering angle          
+        # Compute next steering angle
+        # TODO: this formula works, maybe a little sketch, but has dt multiplied in already so I divide it out.
+        # Maybe I should get it where dt is not already multiplied in 
         angle_diff = target_steering_angle - steering_angle
-        max_step = self.servo_voltage * dt 
+        max_step = self.servo_rads_per_s_at_6_0_V * dt
 
         scale = min(1, np.abs(angle_diff)/max_step)
-        max_step * scale * np.sign(angle_diff) 
+        dsteering_angle = max_step * scale * np.sign(angle_diff) 
 
         dstate = np.array([[
             np.cos(orientation) * velocity,
             np.sin(orientation) * velocity,
             velocity * np.tan(steering_angle) / self.wheelbase,
             (F_wheel - F_friction) / self.mass,
-            target_steering_angle
+            dsteering_angle / dt
         ]]).T
 
         self.state += dstate * dt

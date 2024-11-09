@@ -64,7 +64,7 @@ def get_environment(which):
         eng.add_input_devices([ kb ])
 
         def fn():
-            print(model.state[3,0])
+            print(model.state[4,0])
             nonlocal last_time
             curr_time = time.time()
             model.update(kb.get_input(), curr_time - last_time)
@@ -81,7 +81,10 @@ get_environment("voltage_dynamic_bicycle")()
 #     static_friction=0.7, motor=VoltageBicycleModelMotor())
 
 
-# for i in range(50000):
-#     model.update(np.array([ [6.0], [0.0] ]), 0.01)
-
-# print(model.state[3,0])
+# for i in range(10000):
+#     if i < 5000:
+#         model.update(np.array([ [0.0], [+np.deg2rad(30)] ]), 0.01)
+#     else:
+#          model.update(np.array([ [0.0], [-np.deg2rad(30)] ]), 0.01)
+#     if i%1000 == 0:
+#         print(i * 0.01, model.state[4,0])
