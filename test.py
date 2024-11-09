@@ -1,4 +1,4 @@
-from models import KinematicBicycleModel, DynamicBicycleModel
+from models import *
 from visualizer import PygameEngine, BicycleModelVisualizer
 import numpy as np
 import pygame
@@ -39,8 +39,8 @@ def get_environment(which):
         return lambda: eng.run(fn)
     
     elif which == "dynamic_bicycle":
-        model = DynamicBicycleModel(0.15, 4.54, static_friction=0.9, kinetic_friction=0.7)
-        kb = KeyboardInputDevice(scale_up=44.8, scale_down=np.deg2rad(30))
+        model = DynamicBicycleModel(0.15, 2.27, static_friction=0.9, kinetic_friction=0.7)
+        kb = KeyboardInputDevice(scale_up=20.8, scale_down=np.deg2rad(30))
         eng.add_visualizers([ BicycleModelVisualizer(model) ])
         eng.add_input_devices([ kb ])
 
@@ -53,5 +53,35 @@ def get_environment(which):
 
 
         return lambda: eng.run(fn)
-        
-get_environment("dynamic_bicycle")()
+    
+    elif which == "voltage_dynamic_bicycle":
+        model = VoltageBicycleModel(
+            wheelbase=0.28, wheel_radius=0.051, 
+            mass=3.4, 
+            static_friction=0.7, motor=VoltageBicycleModelMotor())
+        kb = KeyboardInputDevice(scale_up=20.8, scale_down=np.deg2rad(30))
+        eng.add_visualizers([ BicycleModelVisualizer(model) ])
+        eng.add_input_devices([ kb ])
+
+        def fn():
+            print(model.state[2,0])
+            nonlocal last_time
+            curr_time = time.time()
+            model.update(kb.get_input(), curr_time - last_time)
+            last_time = curr_time
+
+
+        return lambda: eng.run(fn)
+
+get_environment("voltage_dynamic_bicycle")()
+
+# model = VoltageBicycleModel(
+#     wheelbase=0.28, wheel_radius=0.051, 
+#     mass=3.4, 
+#     static_friction=0.7, motor=VoltageBicycleModelMotor())
+
+
+# for i in range(50000):
+#     model.update(np.array([ [6.0], [0.0] ]), 0.01)
+
+# print(model.state[3,0])
