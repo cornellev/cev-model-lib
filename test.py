@@ -59,12 +59,12 @@ def get_environment(which):
             wheelbase=0.28, wheel_radius=0.051, 
             mass=3.4, 
             static_friction=0.7, motor=VoltageBicycleModelMotor())
-        kb = KeyboardInputDevice(scale_up=20.8, scale_down=np.deg2rad(30))
+        kb = KeyboardInputDevice(scale_up=6.0, scale_down=np.deg2rad(30))
         eng.add_visualizers([ BicycleModelVisualizer(model) ])
         eng.add_input_devices([ kb ])
 
         def fn():
-            print(model.state[2,0])
+            print(model.state[3,0])
             nonlocal last_time
             curr_time = time.time()
             model.update(kb.get_input(), curr_time - last_time)
